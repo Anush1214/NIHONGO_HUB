@@ -5,6 +5,7 @@ import CastleHome from './components/CastleHome';
 import LoginPage from './components/LoginPage';
 import LearningHall from './components/LearningHall';
 import ResourcePage from './components/ResourcePage';
+import { Analytics } from '@vercel/analytics/react';
 import './App.css';
 
 const VIEWS = {
@@ -84,6 +85,7 @@ function App() {
 
   return (
     <div className="app">
+      <Analytics />
       <SakuraPetals count={60} />
 
       <AnimatePresence mode="wait">
