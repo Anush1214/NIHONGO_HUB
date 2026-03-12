@@ -1,0 +1,611 @@
+.login-page {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.login-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(150deg,
+            #0a0a1a 0%,
+            #1a1a2e 30%,
+            #16213e 60%,
+            #0f3460 100%);
+    z-index: 0;
+}
+
+.login-bg::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 35%;
+    background: linear-gradient(to top, rgba(44, 24, 16, 0.5), transparent);
+}
+
+/* ---------- Torii Gate ---------- */
+.torii-gate {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    width: 520px;
+    height: 500px;
+    pointer-events: none;
+}
+
+.torii-top {
+    position: relative;
+    width: 100%;
+}
+
+.torii-kasagi {
+    width: 110%;
+    margin-left: -5%;
+    height: 18px;
+    background: linear-gradient(to bottom, #CC0000, #990000);
+    border-radius: 4px 4px 0 0;
+    box-shadow: 0 -3px 15px rgba(204, 0, 0, 0.3);
+}
+
+.torii-nuki {
+    width: 100%;
+    height: 12px;
+    background: linear-gradient(to bottom, #B30000, #880000);
+    margin-top: 18px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.torii-pillars {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: calc(100% - 48px);
+}
+
+.torii-pillar {
+    width: 22px;
+    height: 100%;
+    background: linear-gradient(to bottom, #CC0000, #990000);
+    box-shadow: 0 0 15px rgba(204, 0, 0, 0.2);
+    transition: transform 1.2s cubic-bezier(0.16, 0.85, 0.45, 1);
+    transform-origin: bottom center;
+}
+
+.gate-open .torii-pillar.left {
+    transform: rotateZ(-25deg) translateX(-40px);
+}
+
+.gate-open .torii-pillar.right {
+    transform: rotateZ(25deg) translateX(40px);
+}
+
+.gate-open .torii-kasagi {
+    animation: kasagi-glow 1.5s ease-in-out;
+}
+
+@keyframes kasagi-glow {
+    0% {
+        box-shadow: 0 -3px 15px rgba(204, 0, 0, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 -5px 40px rgba(204, 0, 0, 0.8), 0 0 60px rgba(212, 168, 67, 0.4);
+    }
+
+    100% {
+        box-shadow: 0 -3px 15px rgba(204, 0, 0, 0.3);
+    }
+}
+
+/* ---------- Lanterns ---------- */
+.lantern {
+    position: absolute;
+    top: 15%;
+    z-index: 6;
+    transform-origin: top center;
+}
+
+.left-lantern {
+    left: 15%;
+}
+
+.right-lantern {
+    right: 15%;
+}
+
+.lantern-body {
+    width: 50px;
+    height: 65px;
+    background: linear-gradient(to bottom, #CC0000, #990000);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-jp);
+    font-size: 1.5rem;
+    color: #FFD700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    position: relative;
+    box-shadow: 0 4px 15px rgba(204, 0, 0, 0.3);
+}
+
+.lantern-body::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 6px;
+    background: #333;
+    border-radius: 2px;
+}
+
+.lantern-body::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 8px;
+    background: #333;
+    border-radius: 0 0 4px 4px;
+}
+
+.lantern-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(255, 200, 50, 0.2), transparent 70%);
+    pointer-events: none;
+    animation: lantern-pulse 3s ease-in-out infinite;
+}
+
+@keyframes lantern-pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+}
+
+/* ---------- Welcome Overlay ---------- */
+.welcome-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, rgba(204, 0, 0, 0.15), transparent 60%);
+}
+
+.welcome-kanji {
+    font-family: var(--font-jp);
+    font-size: clamp(3rem, 10vw, 6rem);
+    color: white;
+    text-shadow:
+        0 0 30px rgba(204, 0, 0, 0.5),
+        0 0 60px rgba(204, 0, 0, 0.3),
+        0 2px 10px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.2em;
+}
+
+.welcome-text {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* ---------- Login Container ---------- */
+.login-container {
+    position: relative;
+    z-index: 20;
+    width: 100%;
+    max-width: 420px;
+    padding: 0 20px;
+}
+
+.login-card {
+    background: rgba(245, 240, 232, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    padding: 35px 30px 25px;
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(212, 168, 67, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.login-stamp {
+    display: inline-flex;
+    width: 60px;
+    height: 60px;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-red);
+    color: white;
+    font-family: var(--font-jp);
+    font-size: 1.8rem;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 15px rgba(204, 0, 0, 0.3);
+    transform: rotate(-3deg);
+}
+
+.login-title {
+    font-family: var(--font-jp);
+    font-size: 1.6rem;
+    color: var(--color-text-dark);
+    margin-bottom: 4px;
+}
+
+.login-subtitle {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    color: #888;
+    font-style: italic;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-label {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+}
+
+.login-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid rgba(44, 24, 16, 0.12);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--color-text-dark);
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.login-input:focus {
+    border-color: var(--color-red);
+    box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.1);
+    background: white;
+}
+
+.login-input::placeholder {
+    color: #aaa;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--color-red);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 4px;
+    transition: background 0.3s ease;
+}
+
+.login-btn:hover {
+    background: var(--color-red-dark);
+}
+
+.login-btn-jp {
+    font-family: var(--font-jp);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.login-btn-en {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+}
+
+/* ---------- Divider ---------- */
+.login-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(44, 24, 16, 0.15);
+}
+
+.divider-text {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: #999;
+    white-space: nowrap;
+}
+
+/* ---------- Social Buttons ---------- */
+.social-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.social-btn {
+    width: 100%;
+    padding: 11px 16px;
+    border: 2px solid rgba(44, 24, 16, 0.1);
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--color-text-dark);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.social-btn:hover {
+    border-color: rgba(44, 24, 16, 0.25);
+    background: #FAFAFA;
+}
+
+
+
+.social-icon {
+    flex-shrink: 0;
+}
+
+/* ---------- Footer ---------- */
+.login-footer {
+    text-align: center;
+    margin-top: 12px;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: #aaa;
+}
+
+.login-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 18px;
+}
+
+.toggle-text {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: #888;
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    color: var(--color-red);
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 2px 4px;
+    transition: color 0.2s ease;
+}
+
+.toggle-btn:hover {
+    color: var(--color-red-dark);
+    text-decoration: underline;
+}
+
+.input-error {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--color-red);
+    margin-top: 2px;
+}
+
+/* ---------- Responsive — Tablet ---------- */
+@media (max-width: 768px) {
+    .login-page {
+        overflow-y: auto;
+        align-items: flex-start;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+
+    .login-card {
+        padding: 28px 22px 20px;
+    }
+
+    .lantern {
+        display: none;
+    }
+
+    .torii-gate {
+        width: 380px;
+        height: 400px;
+    }
+
+    .login-stamp {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    .login-title {
+        font-size: 1.4rem;
+    }
+
+    .login-header {
+        margin-bottom: 20px;
+    }
+}
+
+/* ---------- Responsive — Phone ---------- */
+@media (max-width: 480px) {
+    .login-page {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .login-container {
+        max-width: 100%;
+        padding: 0 12px;
+    }
+
+    .login-card {
+        padding: 22px 18px 18px;
+        border-radius: 14px;
+    }
+
+    .torii-gate {
+        width: 300px;
+        height: 350px;
+    }
+
+    .login-stamp {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+        margin-bottom: 8px;
+    }
+
+    .login-title {
+        font-size: 1.2rem;
+    }
+
+    .login-subtitle {
+        font-size: 0.8rem;
+    }
+
+    .login-header {
+        margin-bottom: 16px;
+    }
+
+    .login-form {
+        gap: 12px;
+    }
+
+    .login-input {
+        padding: 10px 14px;
+        font-size: 16px;
+        /* Prevents iOS zoom on focus */
+        border-radius: 8px;
+    }
+
+    .login-btn {
+        padding: 12px;
+        border-radius: 8px;
+    }
+
+    .login-btn-jp {
+        font-size: 1rem;
+    }
+
+    .login-btn-en {
+        font-size: 0.75rem;
+    }
+
+    .login-divider {
+        margin: 14px 0;
+    }
+
+    .social-btn {
+        padding: 10px 14px;
+        font-size: 0.82rem;
+        border-radius: 8px;
+    }
+
+    .login-toggle {
+        margin-top: 14px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .toggle-text,
+    .toggle-btn {
+        font-size: 0.75rem;
+    }
+
+    .login-footer {
+        font-size: 0.68rem;
+        margin-top: 10px;
+    }
+
+    .welcome-kanji {
+        font-size: 3rem;
+    }
+
+    .welcome-text {
+        font-size: 1rem;
+    }
+}
+
+/* ---------- Responsive — Very small phones ---------- */
+@media (max-width: 360px) {
+    .login-card {
+        padding: 18px 14px 14px;
+    }
+
+    .torii-gate {
+        width: 260px;
+        height: 300px;
+    }
+
+    .input-label {
+        font-size: 0.7rem;
+    }
+}
