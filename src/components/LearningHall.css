@@ -278,8 +278,9 @@
 /* Responsive — Phone */
 @media (max-width: 480px) {
     .hall-title-container {
-        margin-top: 18px;
+        margin-top: 50px; /* Pushed down to clear buttons */
         margin-bottom: 2px;
+        padding: 0 10px;
     }
 
     .hall-title {
@@ -294,8 +295,15 @@
     .back-btn {
         top: 10px;
         left: 10px;
-        padding: 7px 12px;
-        font-size: 0.72rem;
+        padding: 6px 10px;
+        font-size: 0.7rem;
+    }
+
+    .logout-btn {
+        top: 10px;
+        right: 10px;
+        padding: 6px 10px;
+        font-size: 0.7rem;
     }
 
     .sakura-branch-container {
