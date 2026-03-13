@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { auth, db } from './firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
@@ -28,6 +28,7 @@ function App() {
   const [userName, setUserName] = useState('');
   const [isNewUser, setIsNewUser] = useState(false);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
+  const isInitialAuthCheck = useRef(true);
 
   useEffect(() => {
     localStorage.setItem('currentView', currentView);
@@ -57,18 +58,23 @@ function App() {
           setUserName(user.displayName || user.email.split('@')[0]);
         }
         
-        const savedView = localStorage.getItem('currentView');
-        if (savedView && [VIEWS.HALL, VIEWS.RESOURCE, VIEWS.QUIZ].includes(savedView)) {
-          setCurrentView(savedView);
-        } else {
-          setCurrentView(VIEWS.HALL);
+        if (isInitialAuthCheck.current) {
+          const savedView = localStorage.getItem('currentView');
+          if (savedView && [VIEWS.HALL, VIEWS.RESOURCE, VIEWS.QUIZ].includes(savedView)) {
+            setCurrentView(savedView);
+          } else {
+            setCurrentView(VIEWS.HALL);
+          }
         }
       } else {
         // User is signed out on refresh
-        setCurrentView(VIEWS.HOME);
-        localStorage.removeItem('currentView');
-        localStorage.removeItem('selectedCategory');
+        if (isInitialAuthCheck.current) {
+          setCurrentView(VIEWS.HOME);
+          localStorage.removeItem('currentView');
+          localStorage.removeItem('selectedCategory');
+        }
       }
+      isInitialAuthCheck.current = false;
       setIsAuthChecking(false);
     });
 
