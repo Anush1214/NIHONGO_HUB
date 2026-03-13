@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { auth, db } from './firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { AnimatePresence } from 'framer-motion';
 import SakuraPetals from './components/SakuraPetals';
@@ -22,12 +22,24 @@ const VIEWS = {
 };
 
 function App() {
-  const [currentView, setCurrentView] = useState(VIEWS.HOME);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [currentView, setCurrentView] = useState(() => localStorage.getItem('currentView') || VIEWS.HOME);
+  const [selectedCategory, setSelectedCategory] = useState(() => localStorage.getItem('selectedCategory') || null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [userName, setUserName] = useState('');
   const [isNewUser, setIsNewUser] = useState(false);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
+
+  useEffect(() => {
+    localStorage.setItem('currentView', currentView);
+  }, [currentView]);
+
+  useEffect(() => {
+    if (selectedCategory) {
+      localStorage.setItem('selectedCategory', selectedCategory);
+    } else {
+      localStorage.removeItem('selectedCategory');
+    }
+  }, [selectedCategory]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -44,10 +56,18 @@ function App() {
           console.error("Error fetching user data:", error);
           setUserName(user.displayName || user.email.split('@')[0]);
         }
-        setCurrentView(VIEWS.HALL);
+        
+        const savedView = localStorage.getItem('currentView');
+        if (savedView && [VIEWS.HALL, VIEWS.RESOURCE, VIEWS.QUIZ].includes(savedView)) {
+          setCurrentView(savedView);
+        } else {
+          setCurrentView(VIEWS.HALL);
+        }
       } else {
         // User is signed out on refresh
         setCurrentView(VIEWS.HOME);
+        localStorage.removeItem('currentView');
+        localStorage.removeItem('selectedCategory');
       }
       setIsAuthChecking(false);
     });
@@ -75,11 +95,23 @@ function App() {
     }, 2000);
   }, [isTransitioning]);
 
-  const handleLogout = useCallback(() => {
+  const handleLogout = useCallback(async () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
+    
+    try {
+      if (auth) {
+        await signOut(auth);
+      }
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
+    
     setUserName('');
     setIsNewUser(false);
+    localStorage.removeItem('currentView');
+    localStorage.removeItem('selectedCategory');
+
     // Transition back to exterior castle page
     setTimeout(() => {
       setCurrentView(VIEWS.HOME);
